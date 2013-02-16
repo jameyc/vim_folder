@@ -94,3 +94,15 @@
 	path = bundle/vim-taglist-plus
 	url = https://github.com/int3/vim-taglist-plus
 	ignore = dirty
+[submodule "bundle/vim-cute-python"]
+	path = bundle/vim-cute-python
+	url = https://github.com/ehamberg/vim-cute-python.git
+	ignore = dirty
+[submodule "bundle/js-mask"]
+	path = bundle/js-mask
+	url = git@github.com:jameyc/js-mask.git
+	ignore = dirty
+[submodule "bundle/vim-cute-php"]
+	path = bundle/vim-cute-php
+	url = git@github.com:laurentb/vim-cute-php.git
+	ignore = dirty

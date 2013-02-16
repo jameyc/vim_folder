@@ -268,7 +268,8 @@ if has("win32")
 endif
 
 " Automatically switch current working directory to current file's dir.
-au BufEnter * lcd %:p:h
+"au BufEnter * lcd %:p:h
+au BufEnter * if expand('%:p') !~ '://' | :lchdir %:p:h | endif
 
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 

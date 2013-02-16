@@ -11,7 +11,10 @@ call pathogen#infect() "get pathogen going, for all pathogen installed plugins
 
 set nocompatible        "Do not bother with vi compat mode.
 set encoding=utf8       " Force UTF8 whenever we can
-set colorcolumn=80      " Add a stripe at the 80th column
+
+if exists('+colorcolumn')
+    set colorcolumn=80      " Add a stripe at the 80th column
+endif
 
 try
     lang en_US
@@ -23,7 +26,7 @@ set expandtab           "expandtab, makes tabs to spaces
 set shiftwidth=4        "Places tabspots at space(mod2)
 set smarttab            "Makes backspace delete leading spaces like tabs
 
-set listchars=tab:→·,trail:≠,nbsp:•,precedes:…,extends:↲     "show whitespace chars as...
+set listchars=tab:→·,trail:≠,nbsp:•,precedes:…,extends:↲ "show whitespace chars
 set list                        " Enable display of whitespace chars
 
 "Let us swap tabwidth on the fly if necessary
@@ -51,11 +54,10 @@ set incsearch           "Turn on search as you type
 set ignorecase          "Ignore case while searching except...
 set smartcase           "except when user explicitly types caps
 "set visualbell          "Flash the screen instead of beeping on error
-"Or just do this because the flashing is annoying me right now.
+"... Or just do this because the flashing is annoying me right now.
 set noerrorbells
 set visualbell t_vb=
-"
-set nobackup            "Don't make ~ files.
+
 set autoread            "autoread, if file has been changed outside vim
 syntax on               "Syntax Hilighting on
 set title               "we want to  update the window title
@@ -93,11 +95,6 @@ set noswapfile
 "* Statusline
 let g:syntastic_enable_signs=1  " Allow syntastic plugin to add markers
 
-"Some old status lines, disabled, but left just in case...
-" if has("win32")   " - separate win32 statusline
-    "set statusline=%t%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ %{strftime(\"%I:%M:%S\ %a\ %b\ %d\")}\ %{SyntasticStatuslineFlag()}\ %{fugitive#statusline()}\ %=\ [WC:%{WordCount()}]\ [LEN=%L]\ [POS=%04l,%04v][%p%%]
-" else
-    "set statusline=%t%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ %{strftime(\"%l:%M:%S\ %a\ %b\ %d\")}\ %{SyntasticStatuslineFlag()}\ %{fugitive#statusline()}\ %=\ [WC:%{WordCount()}]\ [LEN=%L]\ [POS=%04l,%04v][%p%%]
 set statusline=%t%m%r%h%w\ [FF=%{&ff}]\ [FT=%Y]%=%{SyntasticStatuslineFlag()}\ %{fugitive#statusline()}\ [LEN=%L]\ [POS=%04l,%04v][%p%%]
 "endif
 set laststatus=2     " Make sure the windows all get status bars, not just
@@ -108,8 +105,9 @@ if has("gui_win32")
     set gfn=DejaVu\ Sans\ Mono:h10
     au GUIEnter * simalt ~x
 elseif has("gui_gtk")
-		set gfn=DejaVu\ Sans\ Mono\ 11
-	"set gfn=Inconsolata\ 12
+    set gfn=DejaVu\ Sans\ Mono\ 11
+    set shell=/bin/zsh
+elseif has("gui_macvim")
     set shell=/bin/zsh
 endif
 
@@ -123,14 +121,10 @@ if has("gui_running")
     set guioptions-=l           "Remove left scrollbar
     set guioptions-=r           "Remove right scrollbar
     set guioptions-=b           "Remove bottom scrollbar
-    "colorscheme oceandeep       "Color scheme
     colorscheme vividchalk       "Color scheme
     set background=dark
-    "colorscheme solarized       "Color scheme
 else
     set t_Co=256
-    "colorscheme oceanblack       "oceandeep isn't supported on the cli
-    "colorscheme vividchalk
     set background=dark
     colorscheme desert       "Color scheme
     set mouse=a                 "enable the mouse
@@ -219,12 +213,13 @@ au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|
 au VimEnter * call SetupWorkspace()
 
 "**Filetype specific
+"* vimrc
+au FileType vim                   set sw=4 expandtab foldmethod=indent
 "* Ruby
-au FileType ruby                  set sw=2
+au FileType ruby                  set sw=2 expandtab
 
 "* Python
-au FileType python                set sw=4
-au FileType python                set foldmethod=indent
+au FileType python                set sw=4 foldmethod=indent
 let python_highlight_all = 1
 
 "* Lua

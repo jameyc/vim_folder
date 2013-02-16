@@ -55,3 +55,18 @@
 [submodule "bundle/vim-unimpared"]
 	path = bundle/vim-unimpared
 	url = git://github.com/tpope/vim-unimpaired.git
+[submodule "bundle/jshint.vim"]
+	path = bundle/jshint.vim
+	url = https://github.com/wookiehangover/jshint.vim.git
+[submodule "bundle/calendar-vim"]
+	path = bundle/calendar-vim
+	url = https://github.com/mattn/calendar-vim.git
+[submodule "bundle/vim-matchit"]
+	path = bundle/vim-matchit
+	url = https://github.com/tsaleh/vim-matchit.git
+[submodule "bundle/rainbow_parentheses.vim"]
+	path = bundle/rainbow_parentheses.vim
+	url = https://github.com/kien/rainbow_parentheses.vim.git
+[submodule "bundle/vim-taglist-plus"]
+	path = bundle/vim-taglist-plus
+	url = https://github.com/int3/vim-taglist-plus

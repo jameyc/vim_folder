@@ -108,7 +108,7 @@ elseif has("gui_gtk")
     set gfn=DejaVu\ Sans\ Mono\ 11
     set shell=/bin/zsh
 elseif has("gui_macvim")
-    set shell=/bin/zsh
+    set shell=/bin/bash
 endif
 
 " Are we using gvim/macvim etc, or using it from the terminal?

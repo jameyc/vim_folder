@@ -1,7 +1,3 @@
-call pathogen#runtime_append_all_bundles()
-
-call pathogen#helptags()
-
 """""""""""""""""""""""""""""""""""""""
 "JameyC's .vimrc
 "
@@ -9,20 +5,8 @@ call pathogen#helptags()
 "  don't use at all. Write your own,
 "  you lazy sod.
 """""""""""""""""""""""""""""""""""""""
-"Plugins used:
-"
-"     > surround.vim - http://www.vim.org/scripts/script.php?script_id=1697
-"       Makes it easy to work with surrounding text:
-"           info -> :help surround
-"
-"     > snipMate.vim - http://www.vim.org/scripts/script.php?script_id=2540
-"       Snippets for many languages (similar to TextMate's):
-"           info -> :help snipMate
-"
-
-"autocmd!                "Existing autocmds go bye-bye - oops, broke some
-"                               plugins
-"
+call pathogen#runtime_append_all_bundles()
+call pathogen#helptags()
 call pathogen#infect() "get pathogen going, for all pathogen installed plugins
 
 set nocompatible        "Do not bother with vi compat mode.
@@ -84,6 +68,7 @@ set sol                 "Let vim delete through line breaks
 set history=50          "Give us more command history
 set linebreak           "Only wrap long lines at word boundaries
 set undofile            "Take advantage of the scary new persistent undo
+set undodir=/home/jamey/.vim/undos/
 
 
 " Set a thesaurus file, just in case
@@ -258,13 +243,12 @@ au FileType xml                   set foldmethod=indent
 au FileType yaml                  set sw=2
 au BufRead,BufNewFile jquery.*.js set ft=javascript syntax=jquery
 
-au FileType javascript set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent
+""" Temporty for current project...
+au FileType javascript set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent syntax=jquery
 au FileType python set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent
-"au FileType jquery set tabstop=2 softtabstop=2 shiftwidth=2 noexpandtab foldmethod=indent
 
 "* PHP
-"au FileType php                   set sw=2
-au FileType php set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab
+au FileType php set tabstop=4 softtabstop=4 shiftwidth=4 expandtab
 
 "set errorformat=%m\ in\ %f\ on\ line\ %l
 "highlights interpolated variables in sql strings and does sql-syntax highlighting.
@@ -285,45 +269,8 @@ endif
 
 " Automatically switch current working directory to current file's dir.
 au BufEnter * lcd %:p:h
-"au BufEnter * execute ":silent! lcd " . expand("%:p:h")
-
-" Set a git command path for VCS plugin on win32
-let VCSCommandGitExec='c:\cygwin\bin\git.exe'
 
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
-
-
-function! OpenPhpFunction (keyword)
-  let proc_keyword = substitute(a:keyword , '_', '-', 'g')
-  try
-    exe 'pedit'
-    " sometimes seems to throw an error
-  catch /.*/
-  endtry
-  " switch to the preview
-  exe 'wincmd P'
-  " edit a new buffer
-  exe 'enew'
-
-  exe "set buftype=nofile"
-  exe "setlocal noswapfile"
-
-  exe 'silent r!c:\lynx\lynx.bat -cfg=c:\lynx\lynx.cfg -dump -nolist http://php.net/'.proc_keyword
-
-  exe 'norm gg'
-  exe 'call search("____________________________________")'
-  exe 'norm dgg'
-  exe 'call search("User Contributed Notes")'
-  exe 'norm dGgg'
-endfunction
-
-
-"inoremap <C-p> <C-O>:call OpenPhpFunction('<c-r><c-w>')<CR><C-O>:wincmd p<CR>
-nnoremap <C-p> :call OpenPhpFunction('<c-r><c-w>')<CR>:wincmd p<CR>
-"vnoremap <C-p> :call OpenPhpFunction('<c-r><c-w>')<CR>:wincmd p<CR>
-"
-"
-
 
 "Adds an ":Entities command to replace some annoying chars like smartquotes
 "and apostrophes with their html escaped versions.

@@ -68,14 +68,14 @@ set sol                 "Let vim delete through line breaks
 set history=50          "Give us more command history
 set linebreak           "Only wrap long lines at word boundaries
 set undofile            "Take advantage of the scary new persistent undo
-set undodir=/home/jamey/.vim/undos/
+set undodir=~/.vim/undos/
 
 
 " Set a thesaurus file, just in case
 if has("win32")
-    set thesaurus=c:\Users\jamey\vimfiles\mthesaur.txt
+    set thesaurus=~\vimfiles\mthesaur.txt
 else
-    set thesaurus=/home/jamey/.vim/mthesaur.txt
+    set thesaurus=~/.vim/mthesaur.txt
 endif
 filetype plugin on
 
@@ -215,6 +215,9 @@ noremap <Leader>sh :set ft=html<CR>i<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0
 set viminfo='10,\"100,:20,%,n~/.viminfo
 au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
 
+" Split the window on startup
+au VimEnter * call SetupWorkspace()
+
 "**Filetype specific
 "* Ruby
 au FileType ruby                  set sw=2
@@ -350,4 +353,9 @@ function! Entities()
   silent s/–/-/eg
 endfunction
 
+function SetupWorkspace()
+    split
+    windo vsplit
+    NERDTreeToggle .
+endfunction
 

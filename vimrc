@@ -29,6 +29,20 @@ set smarttab            "Makes backspace delete leading spaces like tabs
 set listchars=tab:→·,trail:≠,nbsp:•,precedes:…,extends:↲ "show whitespace chars
 set list                        " Enable display of whitespace chars
 
+" ShowMarks {
+    let showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    " Leave on by default, use :ShowMarksOn to enable
+    let g:showmarks_enable = 1
+    " For marks a-z
+    highlight ShowMarksHLl gui=bold guibg=LightBlue guifg=Blue
+    " For marks A-Z
+    highlight ShowMarksHLu gui=bold guibg=LightRed guifg=DarkRed
+    " For all other marks
+    highlight ShowMarksHLo gui=bold guibg=LightYellow guifg=DarkYellow
+    " For multiple marks on the same line.
+    highlight ShowMarksHLm gui=bold guibg=LightGreen guifg=DarkGreen
+" }
+
 "Let us swap tabwidth on the fly if necessary
 map <leader>t2 :setlocal shiftwidth=2<cr>
 map <leader>t4 :setlocal shiftwidth=4<cr>
@@ -64,7 +78,7 @@ set title               "we want to  update the window title
 set titlestring=VIM:\ %-25.55F\ %a%r%m titlelen=70  "what to make window title
 set ttyfast             "y'ariba, yariba!
 set winminheight=0      "Let us squash those windows if we wanna
-set cul                 "Highlights the current cursor line
+set cul cuc             "Highlights the current cursor line
 set isfname+=32         "Let vim use spaces in filenames properly
 set sol                 "Let vim delete through line breaks
 set history=50          "Give us more command history
@@ -210,7 +224,11 @@ set viminfo='10,\"100,:20,%,n~/.viminfo
 au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
 
 " Split the window on startup
-au VimEnter * call SetupWorkspace()
+"
+
+if has("gui_running")
+    au VimEnter * call SetupWorkspace()
+endif
 
 "**Filetype specific
 "* vimrc

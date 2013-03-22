@@ -106,3 +106,7 @@
 	path = bundle/vim-cute-php
 	url = git@github.com:laurentb/vim-cute-php.git
 	ignore = dirty
+[submodule "bundle/vim-showmarks"]
+	path = bundle/vim-showmarks
+	url = git@github.com:jacquesbh/vim-showmarks.git
+	ignore = dirty

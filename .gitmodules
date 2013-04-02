@@ -110,3 +110,7 @@
 	path = bundle/vim-showmarks
 	url = git@github.com:jacquesbh/vim-showmarks.git
 	ignore = dirty
+[submodule "bundle/dart-vim-plugin"]
+	path = bundle/dart-vim-plugin
+	url = git@github.com:dart-lang/dart-vim-plugin.git
+	ignore = dirty

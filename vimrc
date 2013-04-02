@@ -257,11 +257,13 @@ au FileType xhtml                 set sw=2
 au FileType xml                   set sw=2
 au FileType xml                   set foldmethod=indent
 au FileType yaml                  set sw=2
+au FileType dart                  set ts=4 sts=4 sw=4 noet foldmethod=indent
 au BufRead,BufNewFile jquery.*.js set ft=javascript syntax=jquery
 
 """ Temporty for current project...
 au FileType javascript set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent syntax=jquery
 au FileType python set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent
+
 
 "* PHP
 au FileType php set tabstop=4 softtabstop=4 shiftwidth=4 expandtab

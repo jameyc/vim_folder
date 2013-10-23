@@ -108,6 +108,10 @@ set noswapfile
 
 "* Statusline
 let g:syntastic_enable_signs=1  " Allow syntastic plugin to add markers
+let g:syntastic_check_on_open=1
+let g:syntastic_error_symbol='✗'
+let g:syntastic_warning_symbol='⚠'
+let g:syntastic_always_populate_loc_list=1
 
 set statusline=%t%m%r%h%w\ [FF=%{&ff}]\ [FT=%Y]%=%{SyntasticStatuslineFlag()}\ %{fugitive#statusline()}\ [LEN=%L]\ [POS=%04l,%04v][%p%%]
 "endif
@@ -267,6 +271,7 @@ au FileType python set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmeth
 
 "* PHP
 au FileType php set tabstop=4 softtabstop=4 shiftwidth=4 expandtab
+au FileType scss set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent
 
 "set errorformat=%m\ in\ %f\ on\ line\ %l
 "highlights interpolated variables in sql strings and does sql-syntax highlighting.

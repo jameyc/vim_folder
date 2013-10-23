@@ -177,6 +177,7 @@ map <silent><F3> <ESC>:NERDTreeToggle .<CR>
 map <silent><F4> :BufExplorer<CR>
 
 map <F6> <ESC>:set sw=4 ts=4 et!<CR>
+imap <F6> <ESC>:set sw=4 ts=4 et!<CR>a
 "    Open Calendar
 map <F8> :Calendar<CR>
 

@@ -113,7 +113,7 @@ let g:syntastic_error_symbol='✗'
 let g:syntastic_warning_symbol='⚠'
 let g:syntastic_always_populate_loc_list=1
 
-set statusline=%t%m%r%h%w\ [FF=%{&ff}]\ [FT=%Y]%=%{SyntasticStatuslineFlag()}\ %{fugitive#statusline()}\ [LEN=%L]\ [POS=%04l,%04v][%p%%]
+set statusline=%t%m%r%h%w\ [FF=%{&ff}]\ [FT=%Y]\ [Tab=%{&sw},%{&sw},%{&et?'--':'→·'}]%=%{SyntasticStatuslineFlag()}\ %{fugitive#statusline()}\ [LEN=%L]\ [POS=%04l,%04v][%p%%]
 "endif
 set laststatus=2     " Make sure the windows all get status bars, not just
                      "     the focused one
@@ -210,12 +210,12 @@ noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 "* Skeletons
 " A ruby-skeleton with a timestamp
 " TODO - fix the datestamps for win or posix
-noremap <Leader>sr :set ft=ruby<CR>i#!/usr/bin/env ruby<CR>-*-coding:utf-8-*-<CR>vim: set enc=utf8:<CR><CR> author:   Jamey Campbell <jameyc@gmail.com><ESC>:r!c:\cygwin\bin\date -u<CR><ESC>0i# date:     <ESC>o<CR>description:<CR><ESC>40i#<ESC>o<ESC>cl<CR>def main<CR>  <CR><ESC>0iend<CR><CR>if __FILE__ == $0<CR>  main<CR><ESC>0iend<ESC>5k
+noremap <Leader>sr :set ft=ruby<CR>i#!/usr/bin/env ruby<CR>-*-coding:utf-8-*-<CR>vim: set enc=utf8:<CR><CR> author:   Jamey Campbell <jameyc@gmail.com><ESC>:r!date -u<CR><ESC>0i# date:     <ESC>o<CR>description:<CR><ESC>40i#<ESC>o<ESC>cl<CR>def main<CR>  <CR><ESC>0iend<CR><CR>if __FILE__ == $0<CR>  main<CR><ESC>0iend<ESC>5k
 
 
 " Python Skeleton with a timestamp
 " TODO - fix the datestamps for win or posix
-noremap <Leader>sp :set ft=python<CR>i#!/usr/bin/env python<CR>#-*-coding:utf-8-*-<CR>#vim: set enc=utf8:<CR>#<CR># author:   Jamey Campbell <jameyc@gmail.com<ESC>:r!c:\cygwin\bin\date -u<CR><ESC>0i# date:     <ESC>o<CR><ESC>0i# date:     <ESC>o#<CR><CR>def main():<CR>    <CR><CR><CR><BS><BS>if __name__ == "__main__":<CR>    main()<CR><ESC>4ki
+noremap <Leader>sp :set ft=python<CR>i#!/usr/bin/env python<CR>#-*-coding:utf-8-*-<CR>#vim: set enc=utf8:<CR>#<CR># author:   Jamey Campbell <jameyc@gmail.com<ESC>:r!date -u<CR><ESC>0i# date:     <ESC>o<CR><ESC>0i# date:     <ESC>o#<CR><CR>def main():<CR>    <CR><CR><CR><BS><BS>if __name__ == "__main__":<CR>    main()<CR><ESC>4ki
 
 
 " Html skeleton with jquery

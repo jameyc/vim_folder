@@ -10,10 +10,6 @@
 	path = bundle/nerdtree
 	url = https://github.com/scrooloose/nerdtree.git
 	ignore = dirty
-[submodule "bundle/pydoc.vim"]
-	path = bundle/pydoc.vim
-	url = https://github.com/fs111/pydoc.vim.git
-	ignore = dirty
 [submodule "bundle/supertab"]
 	path = bundle/supertab
 	url = https://github.com/ervandew/supertab.git
@@ -109,6 +105,8 @@
 [submodule "bundle/ultisnips"]
 	path = bundle/ultisnips
 	url = https://github.com/SirVer/ultisnips
+	ignore = dirty
 [submodule "snippets/vim-snippets"]
 	path = snippets/vim-snippets
 	url = git@github.com:honza/vim-snippets.git
+	ignore = dirty

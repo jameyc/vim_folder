@@ -139,15 +139,18 @@ if has("gui_running")
     set guioptions-=l           "Remove left scrollbar
     set guioptions-=r           "Remove right scrollbar
     set guioptions-=b           "Remove bottom scrollbar
-    colorscheme vividchalk       "Color scheme
-    set background=dark
 else
-    set t_Co=256
-    set background=dark
-    colorscheme desert       "Color scheme
     set mouse=a                 "enable the mouse
 endif
 
+if has("gui_running") || &term == 'xterm-256color'
+    set t_Co=256
+    colorscheme vividchalk       "Color scheme
+    set background=dark
+else
+    set background=dark
+    colorscheme desert       "Color scheme
+endif
 "**************
 "*Keybinds
 "

@@ -29,6 +29,10 @@ set smarttab            "Makes backspace delete leading spaces like tabs
 set listchars=tab:→·,trail:≠,nbsp:•,precedes:…,extends:↲ "show whitespace chars
 set list                        " Enable display of whitespace chars
 
+" places for ultisnips to search for snippets
+"let g:UltiSnipsSnippetDirectories=["UltiSnips", "snippets/vim-snippets/UltiSnips"]
+let g:UltiSnipsSnippetDirectories=["snippets/vim-snippets/UltiSnips"]
+
 " ShowMarks {
     let showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     " Leave on by default, use :ShowMarksOn to enable

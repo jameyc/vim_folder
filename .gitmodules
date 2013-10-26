@@ -110,3 +110,9 @@
 	path = snippets/vim-snippets
 	url = git@github.com:honza/vim-snippets.git
 	ignore = dirty
+[submodule "bundle/vim-pyref"]
+	path = bundle/vim-pyref
+	url = git@github.com:xolox/vim-pyref.git
+[submodule "bundle/vim-misc"]
+	path = bundle/vim-misc
+	url = git@github.com:xolox/vim-misc.git

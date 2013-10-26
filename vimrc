@@ -33,6 +33,8 @@ set list                        " Enable display of whitespace chars
 "let g:UltiSnipsSnippetDirectories=["UltiSnips", "snippets/vim-snippets/UltiSnips"]
 let g:UltiSnipsSnippetDirectories=["snippets/vim-snippets/UltiSnips"]
 
+:let g:pyref_mapping = 'K'
+:let g:pyref_python = '/usr/share/doc/python2.7'
 " ShowMarks {
     let showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     " Leave on by default, use :ShowMarksOn to enable

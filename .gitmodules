@@ -106,3 +106,6 @@
 	path = bundle/dart-vim-plugin
 	url = git@github.com:dart-lang/dart-vim-plugin.git
 	ignore = dirty
+[submodule "bundle/ultisnips"]
+	path = bundle/ultisnips
+	url = https://github.com/SirVer/ultisnips

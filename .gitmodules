@@ -14,10 +14,6 @@
 	path = bundle/pydoc.vim
 	url = https://github.com/fs111/pydoc.vim.git
 	ignore = dirty
-[submodule "bundle/snipmate-snippets"]
-	path = bundle/snipmate-snippets
-	url = https://github.com/honza/snipmate-snippets.git
-	ignore = dirty
 [submodule "bundle/supertab"]
 	path = bundle/supertab
 	url = https://github.com/ervandew/supertab.git
@@ -53,10 +49,6 @@
 [submodule "bundle/vim-repeat"]
 	path = bundle/vim-repeat
 	url = https://github.com/tpope/vim-repeat.git
-	ignore = dirty
-[submodule "bundle/vim-snipmate"]
-	path = bundle/vim-snipmate
-	url = git://github.com/garbas/vim-snipmate.git
 	ignore = dirty
 [submodule "bundle/vim-space"]
 	path = bundle/vim-space

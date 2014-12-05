@@ -113,6 +113,7 @@ set nowb
 set noswapfile
 
 "* Statusline
+let g:syntastic_python_checkers=['flake8']
 let g:syntastic_enable_signs=1  " Allow syntastic plugin to add markers
 let g:syntastic_check_on_open=1
 let g:syntastic_error_symbol='✗'
@@ -149,6 +150,10 @@ else
     set mouse=a                 "enable the mouse
 endif
 
+
+" Add dashes to keyword tab completion chars
+set iskeyword+=-
+
 if has("gui_running") || &term == 'xterm-256color'
     set t_Co=256
     colorscheme vividchalk       "Color scheme
@@ -175,6 +180,8 @@ map ,0 :10b<CR>
 map ,g :e#<CR>
 
 "misc
+"    Space toggles folds
+noremap <space> za,
 "    Open Quickfix or LL window
 nmap <script> <silent> <F1> :call ToggleLocationList()<CR>
 nmap <script> <silent> <S-F1> :call ToggleQuickfixList()<CR>
@@ -264,7 +271,7 @@ au BufNewFile,BufRead *.as        set filetype=actionscript
 au FileType actionscript          set sw=4
 
 "* Html, misc
-au FileType css                   set sw=2
+au FileType css                   set sw=2 foldmethod=indent
 au FileType sass                  set sw=2
 au FileType scss                  set sw=2
 au FileType html                  set sw=2
@@ -278,10 +285,13 @@ au BufRead,BufNewFile jquery.*.js set ft=javascript syntax=jquery
 """ Temporty for current project...
 au FileType javascript set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent syntax=jquery
 au FileType python set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent
+au BufNewFile,BufRead *.jinja set filetype=htmldjango tabstop=4 sts=4 sw=4 noet
 
 
 "* PHP
 au FileType php set tabstop=4 softtabstop=4 shiftwidth=4 expandtab
+au FileType css set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent
+au FileType sass set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent
 au FileType scss set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent
 
 "set errorformat=%m\ in\ %f\ on\ line\ %l
@@ -390,3 +400,58 @@ function SetupWorkspace()
     NERDTreeToggle .
 endfunction
 
+
+command! -nargs=? -range Dec2hex call s:Dec2hex(<line1>, <line2>, '<args>')
+function! s:Dec2hex(line1, line2, arg) range
+    if empty(a:arg)
+        if histget(':', -1) =~# "^'<,'>" && visualmode() !=# 'V'
+            let cmd = 's/\%V\<\d\+\>/\=printf("0x%x",submatch(0)+0)/g'
+        else
+            let cmd = 's/\<\d\+\>/\=printf("0x%x",submatch(0)+0)/g'
+        endif
+        try
+            execute a:line1 . ',' . a:line2 . cmd
+        catch
+            echo 'Error: No decimal number found'
+        endtry
+    else
+        echo printf('%x', a:arg + 0)
+    endif
+endfunction
+
+command! -nargs=? -range Hex2dec call s:Hex2dec(<line1>, <line2>, '<args>')
+function! s:Hex2dec(line1, line2, arg) range
+    if empty(a:arg)
+        if histget(':', -1) =~# "^'<,'>" && visualmode() !=# 'V'
+            let cmd = 's/\%V0x\x\+/\=submatch(0)+0/g'
+        else
+            let cmd = 's/0x\x\+/\=submatch(0)+0/g'
+        endif
+        try
+            execute a:line1 . ',' . a:line2 . cmd
+        catch
+            echo 'Error: No hex number starting "0x" found'
+        endtry
+    else
+        echo (a:arg =~? '^0x') ? a:arg + 0 : ('0x'.a:arg) + 0
+    endif
+endfunction
+
+au BufNewFile,BufRead *.html,*.htm,*.shtml,*.stm  call s:FThtml()
+
+" Distinguish between HTML, XHTML and Django
+func! s:FThtml()
+  let n = 1
+  while n < 10 && n < line("$")
+    if getline(n) =~ '\<DTD\s\+XHTML\s'
+      setf xhtml
+      return
+    endif
+    if getline(n) =~ '{%\s*\(extends\|block\)\>'
+      setf htmldjango
+      return
+    endif
+    let n = n + 1
+  endwhile
+  setf html
+endfunc

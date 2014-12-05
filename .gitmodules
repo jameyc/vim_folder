@@ -104,7 +104,7 @@
 	ignore = dirty
 [submodule "bundle/ultisnips"]
 	path = bundle/ultisnips
-	url = https://github.com/SirVer/ultisnips
+	url = https://github.com/SirVer/ultisnips.git
 	ignore = dirty
 [submodule "snippets/vim-snippets"]
 	path = snippets/vim-snippets

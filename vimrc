@@ -130,7 +130,7 @@ if has("gui_win32")
     set gfn=DejaVu\ Sans\ Mono:h10
     au GUIEnter * simalt ~x
 elseif has("gui_gtk")
-    set gfn=DejaVu\ Sans\ Mono\ 11
+    set gfn=DejaVu\ Sans\ Mono\ 10
     set shell=/bin/zsh
 elseif has("gui_macvim")
     set shell=/bin/bash
@@ -248,9 +248,9 @@ au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|
 " Split the window on startup
 "
 
-if has("gui_running")
-    au VimEnter * call SetupWorkspace()
-endif
+"if has("gui_running")
+"    au VimEnter * call SetupWorkspace()
+"endif
 
 "**Filetype specific
 "* vimrc
@@ -283,16 +283,16 @@ au FileType dart                  set ts=4 sts=4 sw=4 noet foldmethod=indent
 au BufRead,BufNewFile jquery.*.js set ft=javascript syntax=jquery
 
 """ Temporty for current project...
-au FileType javascript set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent syntax=jquery
-au FileType python set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent
-au BufNewFile,BufRead *.jinja set filetype=htmldjango tabstop=4 sts=4 sw=4 noet
+au FileType javascript set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent syntax=jquery list
+au FileType python set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent list
+au BufNewFile,BufRead *.jinja set filetype=htmldjango tabstop=4 sts=4 sw=4 noet list
 
 
 "* PHP
-au FileType php set tabstop=4 softtabstop=4 shiftwidth=4 expandtab
-au FileType css set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent
-au FileType sass set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent
-au FileType scss set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent
+au FileType php set tabstop=4 softtabstop=4 shiftwidth=4 expandtab list
+au FileType css set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent list
+au FileType sass set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent list
+au FileType scss set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent list
 
 "set errorformat=%m\ in\ %f\ on\ line\ %l
 "highlights interpolated variables in sql strings and does sql-syntax highlighting.
@@ -320,7 +320,7 @@ command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | d
 "Adds an ":Entities command to replace some annoying chars like smartquotes
 "and apostrophes with their html escaped versions.
 "   - todo - make this take ranges.
-command Entities :call Entities()
+command! Entities :call Entities()
 function! Entities()
   silent s/À/\&Agrave;/eg
   silent s/Á/\&Aacute;/eg
@@ -394,7 +394,7 @@ function! Entities()
   silent s/–/-/eg
 endfunction
 
-function SetupWorkspace()
+function! SetupWorkspace()
     split
     windo vsplit
     NERDTreeToggle .
@@ -455,3 +455,30 @@ func! s:FThtml()
   endwhile
   setf html
 endfunc
+
+
+" Unite
+let g:unite_source_history_yank_enable = 1
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+nnoremap <leader>ut :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async:!<cr>
+nnoremap <leader>uf :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
+nnoremap <leader>ur :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
+nnoremap <leader>uo :<C-u>Unite -no-split -buffer-name=outline -start-insert outline<cr>
+nnoremap <leader>uy :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
+nnoremap <leader>ue :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
+
+" Custom mappings for the unite buffer
+autocmd FileType unite call s:unite_settings()
+function! s:unite_settings()
+  " Play nice with supertab
+  let b:SuperTabDisabled=1
+  " Enable navigation with control-j and control-k in insert mode
+  imap <buffer> <C-j>   <Plug>(unite_select_next_line)
+  imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
+endfunction
+" highlight clear SignColumn
+highlight GitGutterAdd ctermfg=green guifg=darkgreen
+highlight GitGutterAdd ctermfg=green guifg=darkgreen
+highlight GitGutterChange ctermfg=yellow guifg=darkyellow
+highlight GitGutterDelete ctermfg=red guifg=darkred
+highlight GitGutterChangeDelete ctermfg=yellow guifg=darkyellow

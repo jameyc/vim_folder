@@ -5,9 +5,100 @@
 "  don't use at all. Write your own,
 "  you lazy sod.
 """""""""""""""""""""""""""""""""""""""
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
-call pathogen#infect() "get pathogen going, for all pathogen installed plugins
+
+
+" NEOBUNDLE STUFF - TODO
+if !1 | finish | endif
+
+if has('vim_starting')
+  if &compatible
+    set nocompatible
+  endif
+  " Get neobundle up and running
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
+
+" Check if make is gmake, or gmake is gmake (I'm looking at you, BSD...)
+let g:make = 'gmake'
+if system('uname -o') =~ '^GNU/'
+        let g:make = 'make'
+endif
+
+" Init neobundle's bundles
+call neobundle#begin(expand('~/.vim/bundle/'))
+
+" Let NeoBundle manage NeoBundle
+" Required:
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+" Bundle time
+NeoBundle 'Shougo/vimproc.vim', {
+\ 'build' : {
+\     'windows' : 'tools\\update-dll-mingw',
+\     'cygwin' : 'make -f make_cygwin.mak',
+\     'mac' : 'make -f make_mac.mak',
+\     'linux' : 'make',
+\     'unix' : 'gmake',
+\    },
+\ }
+NeoBundle 'Shougo/unite.vim'
+
+NeoBundle 'scrooloose/nerdcommenter.git'
+NeoBundle 'scrooloose/syntastic.git'
+NeoBundle 'spiiph/vim-space.git'
+NeoBundle 'tpope/vim-endwise.git'
+NeoBundle 'tpope/vim-repeat.git'
+NeoBundle 'tpope/vim-surround.git'
+NeoBundle 'tpope/vim-unimpaired.git'
+NeoBundle 'vim-scripts/matchit.zip.git'
+NeoBundle 'wookiehangover/jshint.vim.git'
+NeoBundle 'Shougo/vimfiler.vim.git'
+NeoBundle 'vim-scripts/operator-html-escape.git', {'depends' : 'kana/vim-operator-user.git' }
+NeoBundle 't9md/vim-choosewin.git'
+
+" vcs stuff
+NeoBundle 'tpope/vim-fugitive.git'
+NeoBundle 'airblade/vim-gitgutter.git'
+
+" use symbols
+NeoBundle 'ehamberg/vim-cute-python.git'
+NeoBundle 'jameyc/js-mask.git'
+NeoBundle 'laurentb/vim-cute-php.git'
+NeoBundle 'bling/vim-airline.git'
+
+NeoBundle 'Shougo/neocomplete.vim.git'
+NeoBundle 'Shougo/neosnippet.vim.git'
+
+NeoBundle 'gorodinskiy/vim-coloresque.git'
+
+NeoBundle 'oblitum/rainbow.git'
+
+"NeoBundle '/thisivan/vim-bufexplorer.git'
+"NeoBundle '/scrooloose/nerdtree.git'
+"
+"" visually show marks. Do I really use it?
+"NeoBundle '/jacquesbh/vim-showmarks.git'
+"
+"a tab stuff.
+"NeoBundle '/tomtom/tlib_vim.git'
+"NeoBundle '/ervandew/supertab.git'
+"
+"NeoBundle '/milkypostman/vim-togglelist.git'
+"NeoBundle '/kien/rainbow_parentheses.vim.git'
+"NeoBundle '/int3/vim-taglist-plus'
+"NeoBundle '/dart-vim-plugin.git'
+"
+"NeoBundle '/vim-pyref.git'
+"NeoBundle '/vim-misc.git'
+"
+call neobundle#end()
+
+" Neobundle needs this early on...
+filetype plugin indent on
+
+" If there are uninstalled bundles found on startup,
+" this will conveniently prompt you to install them.
+NeoBundleCheck
 
 set nocompatible        "Do not bother with vi compat mode.
 set encoding=utf8       " Force UTF8 whenever we can
@@ -99,12 +190,8 @@ if has("win32")
 else
     set thesaurus=~/.vim/mthesaur.txt
 endif
-filetype plugin on
-
-" Some sane defaults for NERDTree
-let NERDTreeWinPos="right"
-let NERDTreeShowBookmarks=1
-let NERDTreeIgnore = ['\.pyc$']
+" Eliminate escape delay
+set timeoutlen=1000 ttimeoutlen=0
 
 " Set backups off, versioning most stuff anyway, don't need the clutter of
 " ~ files
@@ -120,8 +207,6 @@ let g:syntastic_error_symbol='✗'
 let g:syntastic_warning_symbol='⚠'
 let g:syntastic_always_populate_loc_list=1
 
-set statusline=%t%m%r%h%w\ [FF=%{&ff}]\ [FT=%Y]\ [Tab=%{&sw},%{&sw},%{&et?'--':'→·'}]%=%{SyntasticStatuslineFlag()}\ %{fugitive#statusline()}\ [LEN=%L]\ [POS=%04l,%04v][%p%%]
-"endif
 set laststatus=2     " Make sure the windows all get status bars, not just
                      "     the focused one
 
@@ -130,7 +215,7 @@ if has("gui_win32")
     set gfn=DejaVu\ Sans\ Mono:h10
     au GUIEnter * simalt ~x
 elseif has("gui_gtk")
-    set gfn=DejaVu\ Sans\ Mono\ 10
+    set gfn=DejaVu\ Sans\ Mono\ for\ Powerline\ 10
     set shell=/bin/zsh
 elseif has("gui_macvim")
     set shell=/bin/bash
@@ -138,9 +223,7 @@ endif
 
 " Are we using gvim/macvim etc, or using it from the terminal?
 if has("gui_running")
-    "Set reasonable options for gvim, like big screen size
-    set lines=44
-    set columns=170
+    "Remove some crud from gVim
     set guioptions-=T           "Remove toolbar
     set guioptions-=m           "Remove menubar
     set guioptions-=l           "Remove left scrollbar
@@ -149,7 +232,6 @@ if has("gui_running")
 else
     set mouse=a                 "enable the mouse
 endif
-
 
 " Add dashes to keyword tab completion chars
 set iskeyword+=-
@@ -162,46 +244,29 @@ else
     set background=dark
     colorscheme desert       "Color scheme
 endif
+
 "**************
 "*Keybinds
 "
-"quick buffer movement
-"   - Hit ,1 through ,0 for buffs 1-0. Hit ,g for last buffer
-map ,1 :1b<CR>
-map ,2 :2b<CR>
-map ,3 :3b<CR>
-map ,4 :4b<CR>
-map ,5 :5b<CR>
-map ,6 :6b<CR>
-map ,7 :7b<CR>
-map ,8 :8b<CR>
-map ,9 :9b<CR>
-map ,0 :10b<CR>
-map ,g :e#<CR>
 
 "misc
-"    Space toggles folds
+"    Space toggles folds open and closed
 noremap <space> za,
+
 "    Open Quickfix or LL window
-nmap <script> <silent> <F1> :call ToggleLocationList()<CR>
-nmap <script> <silent> <S-F1> :call ToggleQuickfixList()<CR>
+noremap <script> <silent> <F1> :call ToggleLocationList()<CR>
+noremap <script> <silent> <S-F1> :call ToggleQuickfixList()<CR>
+
 "    Open ctags taglist
-map <silent><F2> <ESC>:Tlist<CR>
-"    Open NERDtree
-map <silent><F3> <ESC>:NERDTreeToggle .<CR>
-"    Open BufExplorer
-map <silent><F4> :BufExplorer<CR>
+"map <silent><F2> <ESC>:Tlist<CR>
 
-map <F6> <ESC>:set sw=4 ts=4 et!<CR>
+noremap <silent><F3> <ESC> :VimFilerExplorer bookmark:<CR>
+noremap <silent><F4> <ESC> :Unite buffer<CR>
+noremap <silent><F5> <ESC> :Unite history/yank<CR>
+
+noremap <F6> <ESC>:set sw=4 ts=4 et!<CR>
 imap <F6> <ESC>:set sw=4 ts=4 et!<CR>a
-"    Open Calendar
-map <F8> :Calendar<CR>
 
-"fullscreen for windows
-map <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR> 
-
-"quick write
-map <Leader>w :w<CR>
 "Insert current time
 inoremap <F5> <C-R>=strftime("%c")<CR>
 "Toggle spellchecking
@@ -225,15 +290,8 @@ map ,h :set list!<CR>
 noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
 "* Skeletons
-" A ruby-skeleton with a timestamp
-" TODO - fix the datestamps for win or posix
-noremap <Leader>sr :set ft=ruby<CR>i#!/usr/bin/env ruby<CR>-*-coding:utf-8-*-<CR>vim: set enc=utf8:<CR><CR> author:   Jamey Campbell <jameyc@gmail.com><ESC>:r!date -u<CR><ESC>0i# date:     <ESC>o<CR>description:<CR><ESC>40i#<ESC>o<ESC>cl<CR>def main<CR>  <CR><ESC>0iend<CR><CR>if __FILE__ == $0<CR>  main<CR><ESC>0iend<ESC>5k
-
-
-" Python Skeleton with a timestamp
-" TODO - fix the datestamps for win or posix
-noremap <Leader>sp :set ft=python<CR>i#!/usr/bin/env python<CR>#-*-coding:utf-8-*-<CR>#vim: set enc=utf8:<CR>#<CR># author:   Jamey Campbell <jameyc@gmail.com<ESC>:r!date -u<CR><ESC>0i# date:     <ESC>o<CR><ESC>0i# date:     <ESC>o#<CR><CR>def main():<CR>    <CR><CR><CR><BS><BS>if __name__ == "__main__":<CR>    main()<CR><ESC>4ki
-
+""" REMOVED MOST OLD SKELETONS FOR LACK OF MAINTENANCE
+""" Look into https://github.com/pgilad/vim-skeletons
 
 " Html skeleton with jquery
 " TODO this is outdated, needs an update
@@ -253,48 +311,21 @@ au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|
 "endif
 
 "**Filetype specific
-"* vimrc
-au FileType vim                   set sw=4 expandtab foldmethod=indent
-"* Ruby
-au FileType ruby                  set sw=2 expandtab
-
-"* Python
-au FileType python                set sw=4 foldmethod=indent
-let python_highlight_all = 1
-
-"* Lua
-au FileType lua                   set sw=2
-au FileType lua                   set foldmethod=indent
-
-"* Actionscript
-au BufNewFile,BufRead *.as        set filetype=actionscript
-au FileType actionscript          set sw=4
-
-"* Html, misc
-au FileType css                   set sw=2 foldmethod=indent
-au FileType sass                  set sw=2
-au FileType scss                  set sw=2
-au FileType html                  set sw=2
-au FileType xhtml                 set sw=2
-au FileType xml                   set sw=2
-au FileType xml                   set foldmethod=indent
-au FileType yaml                  set sw=2
-au FileType dart                  set ts=4 sts=4 sw=4 noet foldmethod=indent
 au BufRead,BufNewFile jquery.*.js set ft=javascript syntax=jquery
-
-""" Temporty for current project...
-au FileType javascript set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent syntax=jquery list
-au FileType python set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent list
 au BufNewFile,BufRead *.jinja set filetype=htmldjango tabstop=4 sts=4 sw=4 noet list
 
+au FileType css,sass,scss                   set ts=4 sts=4 sw=4 noet fdm=indent list
+au FileType python,dart,php                 set ts=4 sts=4 sw=4 noet fdm=indent list
+au FileType lua,haskell,ruby                set sw=2 fdm=indent
+au FileType html,htmldjango,xhtml,xml,yaml  set sw=4 fdm=indent
+au FileType javascript,jquery               set ts=4 sts=4 sw=4 noet fdm=indent syntax=jquery list
+au FileType vim                             set sw=4 et fdm=indent
 
-"* PHP
-au FileType php set tabstop=4 softtabstop=4 shiftwidth=4 expandtab list
-au FileType css set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent list
-au FileType sass set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent list
-au FileType scss set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab foldmethod=indent list
+au FileType python,javascript,jquery,sass,scss,css call rainbow#load()
 
-"set errorformat=%m\ in\ %f\ on\ line\ %l
+let python_highlight_all = 1
+
+
 "highlights interpolated variables in sql strings and does sql-syntax highlighting.
 autocmd FileType php let php_sql_query=1
 "does exactly that. highlights html inside of php strings
@@ -304,142 +335,22 @@ autocmd FileType php let php_noShortTags=1
 "automagically folds functions & methods.
 autocmd FileType php let php_folding=1
 
-au FileType haskell set sw=2
-
-" Path for pydocs, on win32 - for inline syntax docs
-if has("win32")
-    let g:pydoc_cmd = "c:/Python26/lib/pydoc.py"
-endif
-
 " Automatically switch current working directory to current file's dir.
-"au BufEnter * lcd %:p:h
 au BufEnter * if expand('%:p') !~ '://' | :lchdir %:p:h | endif
 
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 
-"Adds an ":Entities command to replace some annoying chars like smartquotes
-"and apostrophes with their html escaped versions.
-"   - todo - make this take ranges.
-command! Entities :call Entities()
-function! Entities()
-  silent s/À/\&Agrave;/eg
-  silent s/Á/\&Aacute;/eg
-  silent s/Â/\&Acirc;/eg
-  silent s/Ã/\&Atilde;/eg
-  silent s/Ä/\&Auml;/eg
-  silent s/Å/\&Aring;/eg
-  silent s/Æ/\&AElig;/eg
-  silent s/Ç/\&Ccedil;/eg
-  silent s/È/\&Egrave;/eg
-  silent s/É/\&Eacute;/eg
-  silent s/Ê/\&Ecirc;/eg
-  silent s/Ë/\&Euml;/eg
-  silent s/Ì/\&Igrave;/eg
-  silent s/Í/\&Iacute;/eg
-  silent s/Î/\&Icirc;/eg
-  silent s/Ï/\&Iuml;/eg
-  silent s/Ð/\&ETH;/eg
-  silent s/Ñ/\&Ntilde;/eg
-  silent s/Ò/\&Ograve;/eg
-  silent s/Ó/\&Oacute;/eg
-  silent s/Ô/\&Ocirc;/eg
-  silent s/Õ/\&Otilde;/eg
-  silent s/Ö/\&Ouml;/eg
-  silent s/Ø/\&Oslash;/eg
-  silent s/Ù/\&Ugrave;/eg
-  silent s/Ú/\&Uacute;/eg
-  silent s/Û/\&Ucirc;/eg
-  silent s/Ü/\&Uuml;/eg
-  silent s/Ý/\&Yacute;/eg
-  silent s/Þ/\&THORN;/eg
-  silent s/ß/\&szlig;/eg
-  silent s/à/\&agrave;/eg
-  silent s/á/\&aacute;/eg
-  silent s/â/\&acirc;/eg
-  silent s/ã/\&atilde;/eg
-  silent s/ä/\&auml;/eg
-  silent s/å/\&aring;/eg
-  silent s/æ/\&aelig;/eg
-  silent s/ç/\&ccedil;/eg
-  silent s/è/\&egrave;/eg
-  silent s/é/\&eacute;/eg
-  silent s/ê/\&ecirc;/eg
-  silent s/ë/\&euml;/eg
-  silent s/ì/\&igrave;/eg
-  silent s/í/\&iacute;/eg
-  silent s/î/\&icirc;/eg
-  silent s/ï/\&iuml;/eg
-  silent s/ð/\&eth;/eg
-  silent s/ñ/\&ntilde;/eg
-  silent s/ò/\&ograve;/eg
-  silent s/ó/\&oacute;/eg
-  silent s/ô/\&ocirc;/eg
-  silent s/õ/\&otilde;/eg
-  silent s/ö/\&ouml;/eg
-  silent s/ø/\&oslash;/eg
-  silent s/ù/\&ugrave;/eg
-  silent s/ú/\&uacute;/eg
-  silent s/û/\&ucirc;/eg
-  silent s/ü/\&uuml;/eg
-  silent s/ý/\&yacute;/eg
-  silent s/þ/\&thorn;/eg
-  silent s/ÿ/\&yuml;/eg
-  silent s/’/\&#39;/eg
-  silent s/“/\&#8220;/eg
-  silent s/”/\&#8221;/eg
-  silent s/™/\&trade;/eg
-  silent s/’/&#8217;/eg
-  silent s/…/\&hellip;/eg
-  silent s/\.\.\./\&hellip;/eg
-  silent s/–/-/eg
-endfunction
+noremap <leader>h <Plug>(operator-html-escape)
+noremap <leader>H <Plug>(operator-html-unescape)
 
-function! SetupWorkspace()
-    split
-    windo vsplit
-    NERDTreeToggle .
-endfunction
-
-
-command! -nargs=? -range Dec2hex call s:Dec2hex(<line1>, <line2>, '<args>')
-function! s:Dec2hex(line1, line2, arg) range
-    if empty(a:arg)
-        if histget(':', -1) =~# "^'<,'>" && visualmode() !=# 'V'
-            let cmd = 's/\%V\<\d\+\>/\=printf("0x%x",submatch(0)+0)/g'
-        else
-            let cmd = 's/\<\d\+\>/\=printf("0x%x",submatch(0)+0)/g'
-        endif
-        try
-            execute a:line1 . ',' . a:line2 . cmd
-        catch
-            echo 'Error: No decimal number found'
-        endtry
-    else
-        echo printf('%x', a:arg + 0)
-    endif
-endfunction
-
-command! -nargs=? -range Hex2dec call s:Hex2dec(<line1>, <line2>, '<args>')
-function! s:Hex2dec(line1, line2, arg) range
-    if empty(a:arg)
-        if histget(':', -1) =~# "^'<,'>" && visualmode() !=# 'V'
-            let cmd = 's/\%V0x\x\+/\=submatch(0)+0/g'
-        else
-            let cmd = 's/0x\x\+/\=submatch(0)+0/g'
-        endif
-        try
-            execute a:line1 . ',' . a:line2 . cmd
-        catch
-            echo 'Error: No hex number starting "0x" found'
-        endtry
-    else
-        echo (a:arg =~? '^0x') ? a:arg + 0 : ('0x'.a:arg) + 0
-    endif
-endfunction
-
-au BufNewFile,BufRead *.html,*.htm,*.shtml,*.stm  call s:FThtml()
+"function! SetupWorkspace()
+"    split
+"    windo vsplit
+"    NERDTreeToggle .
+"endfunction
 
 " Distinguish between HTML, XHTML and Django
+au BufNewFile,BufRead *.html,*.htm,*.shtml,*.stm  call s:FThtml()
 func! s:FThtml()
   let n = 1
   while n < 10 && n < line("$")
@@ -456,16 +367,20 @@ func! s:FThtml()
   setf html
 endfunc
 
+" NeoComplete
+let g:neocomplcache_enable_at_startup = 1
+let g:neocomplete#enable_at_startup = 1
 
 " Unite
 let g:unite_source_history_yank_enable = 1
+let g:vimfiler_as_default_explorer = 1
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
-nnoremap <leader>ut :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async:!<cr>
-nnoremap <leader>uf :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
-nnoremap <leader>ur :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
-nnoremap <leader>uo :<C-u>Unite -no-split -buffer-name=outline -start-insert outline<cr>
-nnoremap <leader>uy :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
-nnoremap <leader>ue :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
+" nnoremap <leader>ut :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async:!<cr>
+" nnoremap <leader>uf :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
+" nnoremap <leader>ur :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
+" nnoremap <leader>uo :<C-u>Unite -no-split -buffer-name=outline -start-insert outline<cr>
+" nnoremap <leader>uy :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
+" nnoremap <leader>ue :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
 
 " Custom mappings for the unite buffer
 autocmd FileType unite call s:unite_settings()
@@ -476,9 +391,24 @@ function! s:unite_settings()
   imap <buffer> <C-j>   <Plug>(unite_select_next_line)
   imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
 endfunction
-" highlight clear SignColumn
+
+" VimFiler
+let g:vimfiler_tree_leaf_icon = ' '
+let g:vimfiler_tree_opened_icon = '▾'
+let g:vimfiler_tree_closed_icon = '▸'
+let g:vimfiler_file_icon = '-'
+let g:vimfiler_marked_file_icon = '*'
+
+" GitGutter fix some of the colors
 highlight GitGutterAdd ctermfg=green guifg=darkgreen
 highlight GitGutterAdd ctermfg=green guifg=darkgreen
 highlight GitGutterChange ctermfg=yellow guifg=darkyellow
 highlight GitGutterDelete ctermfg=red guifg=darkred
 highlight GitGutterChangeDelete ctermfg=yellow guifg=darkyellow
+
+let g:airline_powerline_fonts = 1
+
+" Chooseiwn overlays
+let g:choosewin_overlay_enable = 1
+map <leader>wc <Plug>(choosewin)
+map <leader>ws <Plug>(choosewin-swap)

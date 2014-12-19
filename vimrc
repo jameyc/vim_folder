@@ -42,6 +42,7 @@ NeoBundle 'Shougo/vimproc.vim', {
 \    },
 \ }
 NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/neomru.vim.git'
 
 NeoBundle 'scrooloose/nerdcommenter.git'
 NeoBundle 'scrooloose/syntastic.git'
@@ -73,26 +74,29 @@ NeoBundle 'gorodinskiy/vim-coloresque.git'
 
 NeoBundle 'oblitum/rainbow.git'
 
+NeoBundle 'milkypostman/vim-togglelist.git'
 "NeoBundle '/thisivan/vim-bufexplorer.git'
 "NeoBundle '/scrooloose/nerdtree.git'
-"
-"" visually show marks. Do I really use it?
-"NeoBundle '/jacquesbh/vim-showmarks.git'
 "
 "a tab stuff.
 "NeoBundle '/tomtom/tlib_vim.git'
 "NeoBundle '/ervandew/supertab.git'
 "
-"NeoBundle '/milkypostman/vim-togglelist.git'
-"NeoBundle '/kien/rainbow_parentheses.vim.git'
 "NeoBundle '/int3/vim-taglist-plus'
 "NeoBundle '/dart-vim-plugin.git'
 "
 "NeoBundle '/vim-pyref.git'
 "NeoBundle '/vim-misc.git'
-"
-call neobundle#end()
 
+" TODO - look into Tern options more
+NeoBundle 'marijnh/tern_for_vim.git', {
+\ 'build': {
+\   'others': 'npm install'
+\}}
+NeoBundle 'majutsushi/tagbar.git'
+
+call neobundle#end()
+nmap <F7> :TagbarToggle<CR>
 " Neobundle needs this early on...
 filetype plugin indent on
 
@@ -250,10 +254,9 @@ endif
 "
 
 "misc
-"    Space toggles folds open and closed
-noremap <space> za,
 
 "    Open Quickfix or LL window
+let g:toggle_list_no_mappings = 1
 noremap <script> <silent> <F1> :call ToggleLocationList()<CR>
 noremap <script> <silent> <S-F1> :call ToggleQuickfixList()<CR>
 
@@ -261,7 +264,11 @@ noremap <script> <silent> <S-F1> :call ToggleQuickfixList()<CR>
 "map <silent><F2> <ESC>:Tlist<CR>
 
 noremap <silent><F3> <ESC> :VimFilerExplorer bookmark:<CR>
-noremap <silent><F4> <ESC> :Unite buffer<CR>
+"noremap <silent><F4> <ESC> :Unite buffer<CR>
+"noremap <silent><F4> <ESC> :Unite buffer file_mru<CR>
+noremap <silent><F4> <ESC> :UniteWithProjectDir buffer file_mru file_rec/async -auto-preview<CR>
+noremap <silent><S-F4> <ESC> :Unite grep:~/Documents/Dev/survature/survature.com:-iR:file<CR>
+"noremap <silent><F4> <ESC> :Unite buffer file_mru rec_project/async<CR>
 noremap <silent><F5> <ESC> :Unite history/yank<CR>
 
 noremap <F6> <ESC>:set sw=4 ts=4 et!<CR>
@@ -412,3 +419,41 @@ let g:airline_powerline_fonts = 1
 let g:choosewin_overlay_enable = 1
 map <leader>wc <Plug>(choosewin)
 map <leader>ws <Plug>(choosewin-swap)
+
+function! NumberToggle()
+  if(&relativenumber == 1)
+    set norelativenumber
+  else
+    set relativenumber
+  endif
+endfunc
+
+nnoremap <leader>rn :call NumberToggle()<cr>
+
+let g:vimfiler_ignore_pattern = '\%(.pyc\|.git\)$'
+
+if executable('ag')
+  let g:unite_source_grep_command = 'ag'
+  let g:unite_source_grep_default_opts =
+        \ '--line-numbers --nocolor --nogroup --hidden --ignore ' .
+        \ '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'' ' .
+        \ '--ignore ''**/*.pyc'''
+  let g:unite_source_grep_recursive_opt = ''
+elseif executable('ack-grep')
+  let g:unite_source_grep_command = 'ack-grep'
+  " Match whole word only. This might/might not be a good idea
+  let g:unite_source_grep_default_opts = '--no-heading --no-color -a -H'
+  "let g:unite_source_grep_default_opts = '--no-heading --no-color -a -w'
+  let g:unite_source_grep_default_opts = '--exclude ''\.(git|svn|hg|bzr)'''
+  let g:unite_source_grep_recursive_opt = ''
+elseif executable('ack')
+  let g:unite_source_grep_command = 'ack'
+  let g:unite_source_grep_default_opts = '--no-heading --no-color -a -w'
+  let g:unite_source_grep_default_opts = '--exclude ''\.(git|svn|hg|bzr)'''
+  let g:unite_source_grep_recursive_opt = ''
+endif
+
+let NERDCustomDelimiters = {
+\ 'scss': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
+\ 'css': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' }
+\ }

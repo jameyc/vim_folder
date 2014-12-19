@@ -44,7 +44,9 @@ NeoBundle 'Shougo/vimproc.vim', {
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/neomru.vim.git'
 
-NeoBundle 'scrooloose/nerdcommenter.git'
+NeoBundle 'tpope/vim-commentary.git'
+"NeoBundle 'scrooloose/nerdcommenter.git'
+
 NeoBundle 'scrooloose/syntastic.git'
 NeoBundle 'spiiph/vim-space.git'
 NeoBundle 'tpope/vim-endwise.git'
@@ -161,6 +163,7 @@ set smartindent                  " Auto replace tab with spaces
 set autoindent                   " Auto-indent in known closures
 set foldmethod=syntax   "Set the fold method to use syntax. Fine for me.
 set foldcolumn=4        "Add folding column to the left of the line numbers
+set foldlevel=1        " Close any folds too nested, but leave top level open
 set number              "Enable line numbers
 set showmode            "Show if we're in insert mode on line 1
 set showcmd             "Shows edit mode commands we've started to type
@@ -453,7 +456,7 @@ elseif executable('ack')
   let g:unite_source_grep_recursive_opt = ''
 endif
 
-let NERDCustomDelimiters = {
-\ 'scss': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
-\ 'css': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' }
-\ }
+" let NERDCustomDelimiters = {
+" \ 'scss': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
+" \ 'css': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' }
+" \ }

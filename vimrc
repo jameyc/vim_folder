@@ -32,6 +32,8 @@ call neobundle#begin(expand('~/.vim/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 " Bundle time
+
+" Vimproc adds async support for stuff like unite to lean on
 NeoBundle 'Shougo/vimproc.vim', {
 \ 'build' : {
 \     'windows' : 'tools\\update-dll-mingw',
@@ -41,61 +43,74 @@ NeoBundle 'Shougo/vimproc.vim', {
 \     'unix' : 'gmake',
 \    },
 \ }
+
+" Unite adds searching interfaces for things like files and open buffers
+" * Vimfiler is a file browser/tree leveraging it
+" * Choosewin is a window picker, mainly here for vimfiler's use
+" * Neomru adds most recently used files list support to unite
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/neomru.vim.git'
+NeoBundle 'Shougo/vimfiler.vim.git'
 
+" Window picker, mainly here for vimfiler
+NeoBundle 't9md/vim-choosewin.git'
+
+" Commenting, lightweight, < 100sloc.
 NeoBundle 'tpope/vim-commentary.git'
-"NeoBundle 'scrooloose/nerdcommenter.git'
 
+" Syntax checkers
 NeoBundle 'scrooloose/syntastic.git'
+NeoBundle 'wookiehangover/jshint.vim.git'
+
+" Makes space key repeat various motions, like . repeats actions
 NeoBundle 'spiiph/vim-space.git'
+
 NeoBundle 'tpope/vim-endwise.git'
 NeoBundle 'tpope/vim-repeat.git'
 NeoBundle 'tpope/vim-surround.git'
 NeoBundle 'tpope/vim-unimpaired.git'
-NeoBundle 'vim-scripts/matchit.zip.git'
-NeoBundle 'wookiehangover/jshint.vim.git'
-NeoBundle 'Shougo/vimfiler.vim.git'
-NeoBundle 'vim-scripts/operator-html-escape.git', {'depends' : 'kana/vim-operator-user.git' }
-NeoBundle 't9md/vim-choosewin.git'
 
-" vcs stuff
+" Adds functions which can escape characters for html
+NeoBundle 'vim-scripts/operator-html-escape.git', {'depends' : 'kana/vim-operator-user.git' }
+
+" Extends vim's % matching to many more things, like html tags
+NeoBundle 'vim-scripts/matchit.zip.git'
+
+" Git stuff
 NeoBundle 'tpope/vim-fugitive.git'
 NeoBundle 'airblade/vim-gitgutter.git'
 
-" use symbols
+" use utf-8 symbols in place of common things like == and 'function'
 NeoBundle 'ehamberg/vim-cute-python.git'
 NeoBundle 'jameyc/js-mask.git'
 NeoBundle 'laurentb/vim-cute-php.git'
+
+" A statusline replacement with some extra features
 NeoBundle 'bling/vim-airline.git'
 
+" Autocomplete and snippet support
 NeoBundle 'Shougo/neocomplete.vim.git'
 NeoBundle 'Shougo/neosnippet.vim.git'
 
+" Color hex colors like #00f, #f00 and so on. rgb(128,128,128) support too
 NeoBundle 'gorodinskiy/vim-coloresque.git'
 
+" Rainbow parens, for nesting
 NeoBundle 'oblitum/rainbow.git'
 
+" A tag list. Leans on other stuff to generate ctags
 NeoBundle 'milkypostman/vim-togglelist.git'
-"NeoBundle '/thisivan/vim-bufexplorer.git'
-"NeoBundle '/scrooloose/nerdtree.git'
-"
-"a tab stuff.
-"NeoBundle '/tomtom/tlib_vim.git'
-"NeoBundle '/ervandew/supertab.git'
-"
-"NeoBundle '/int3/vim-taglist-plus'
-"NeoBundle '/dart-vim-plugin.git'
-"
-"NeoBundle '/vim-pyref.git'
-"NeoBundle '/vim-misc.git'
 
 " TODO - look into Tern options more
+" Javascript docs and tags
 NeoBundle 'marijnh/tern_for_vim.git', {
 \ 'build': {
 \   'others': 'npm install'
 \}}
+" A tag bar for ctags etc
 NeoBundle 'majutsushi/tagbar.git'
+"
+"NeoBundle 'xolox/vim-misc.git'
 
 call neobundle#end()
 nmap <F7> :TagbarToggle<CR>
@@ -359,38 +374,13 @@ noremap <leader>H <Plug>(operator-html-unescape)
 "    NERDTreeToggle .
 "endfunction
 
-" Distinguish between HTML, XHTML and Django
-au BufNewFile,BufRead *.html,*.htm,*.shtml,*.stm  call s:FThtml()
-func! s:FThtml()
-  let n = 1
-  while n < 10 && n < line("$")
-    if getline(n) =~ '\<DTD\s\+XHTML\s'
-      setf xhtml
-      return
-    endif
-    if getline(n) =~ '{%\s*\(extends\|block\)\>'
-      setf htmldjango
-      return
-    endif
-    let n = n + 1
-  endwhile
-  setf html
-endfunc
-
 " NeoComplete
-let g:neocomplcache_enable_at_startup = 1
 let g:neocomplete#enable_at_startup = 1
 
 " Unite
 let g:unite_source_history_yank_enable = 1
 let g:vimfiler_as_default_explorer = 1
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
-" nnoremap <leader>ut :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async:!<cr>
-" nnoremap <leader>uf :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
-" nnoremap <leader>ur :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
-" nnoremap <leader>uo :<C-u>Unite -no-split -buffer-name=outline -start-insert outline<cr>
-" nnoremap <leader>uy :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
-" nnoremap <leader>ue :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
 
 " Custom mappings for the unite buffer
 autocmd FileType unite call s:unite_settings()
@@ -416,6 +406,7 @@ highlight GitGutterChange ctermfg=yellow guifg=darkyellow
 highlight GitGutterDelete ctermfg=red guifg=darkred
 highlight GitGutterChangeDelete ctermfg=yellow guifg=darkyellow
 
+" Airline
 let g:airline_powerline_fonts = 1
 
 " Chooseiwn overlays
@@ -455,8 +446,3 @@ elseif executable('ack')
   let g:unite_source_grep_default_opts = '--exclude ''\.(git|svn|hg|bzr)'''
   let g:unite_source_grep_recursive_opt = ''
 endif
-
-" let NERDCustomDelimiters = {
-" \ 'scss': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
-" \ 'css': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' }
-" \ }

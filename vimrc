@@ -111,6 +111,8 @@ NeoBundle 'marijnh/tern_for_vim.git', {
 NeoBundle 'majutsushi/tagbar.git'
 "
 "NeoBundle 'xolox/vim-misc.git'
+"better js syntax
+NeoBundleLazy 'jelera/vim-javascript-syntax', {'autoload':{'filetypes':['javascript']}}
 
 call neobundle#end()
 nmap <F7> :TagbarToggle<CR>
@@ -143,23 +145,7 @@ set list                        " Enable display of whitespace chars
 
 " places for ultisnips to search for snippets
 "let g:UltiSnipsSnippetDirectories=["UltiSnips", "snippets/vim-snippets/UltiSnips"]
-let g:UltiSnipsSnippetDirectories=["snippets/vim-snippets/UltiSnips"]
-
-:let g:pyref_mapping = 'K'
-:let g:pyref_python = '/usr/share/doc/python2.7'
-" ShowMarks {
-    let showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    " Leave on by default, use :ShowMarksOn to enable
-    let g:showmarks_enable = 1
-    " For marks a-z
-    highlight ShowMarksHLl gui=bold guibg=LightBlue guifg=Blue
-    " For marks A-Z
-    highlight ShowMarksHLu gui=bold guibg=LightRed guifg=DarkRed
-    " For all other marks
-    highlight ShowMarksHLo gui=bold guibg=LightYellow guifg=DarkYellow
-    " For multiple marks on the same line.
-    highlight ShowMarksHLm gui=bold guibg=LightGreen guifg=DarkGreen
-" }
+" let g:UltiSnipsSnippetDirectories=["snippets/vim-snippets/UltiSnips"]
 
 "Let us swap tabwidth on the fly if necessary
 map <leader>t2 :setlocal shiftwidth=2<cr>
@@ -238,6 +224,7 @@ if has("gui_win32")
     au GUIEnter * simalt ~x
 elseif has("gui_gtk")
     set gfn=DejaVu\ Sans\ Mono\ for\ Powerline\ 10
+    "set gfn=DejaVu\ Sans\ Mono\ for\ Powerline\ 7
     set shell=/bin/zsh
 elseif has("gui_macvim")
     set shell=/bin/bash
@@ -249,6 +236,7 @@ if has("gui_running")
     set guioptions-=T           "Remove toolbar
     set guioptions-=m           "Remove menubar
     set guioptions-=l           "Remove left scrollbar
+    set guioptions-=L           "Remove left scrollbar
     set guioptions-=r           "Remove right scrollbar
     set guioptions-=b           "Remove bottom scrollbar
 else
@@ -346,7 +334,7 @@ au FileType html,htmldjango,xhtml,xml,yaml  set sw=4 fdm=indent
 au FileType javascript,jquery               set ts=4 sts=4 sw=4 noet fdm=indent syntax=jquery list
 au FileType vim                             set sw=4 et fdm=indent
 
-au FileType python,javascript,jquery,sass,scss,css call rainbow#load()
+" au FileType python,javascript,jquery,sass,scss,css call rainbow#load()
 
 let python_highlight_all = 1
 
@@ -361,7 +349,8 @@ autocmd FileType php let php_noShortTags=1
 autocmd FileType php let php_folding=1
 
 " Automatically switch current working directory to current file's dir.
-au BufEnter * if expand('%:p') !~ '://' | :lchdir %:p:h | endif
+" au BufEnter * if expand('%:p') !~ '://' | :lchdir %:p:h | endif
+autocmd FileType vimfiler set nonu
 
 command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
 
@@ -376,6 +365,7 @@ noremap <leader>H <Plug>(operator-html-unescape)
 
 " NeoComplete
 let g:neocomplete#enable_at_startup = 1
+set completeopt-=preview
 
 " Unite
 let g:unite_source_history_yank_enable = 1
@@ -407,6 +397,7 @@ highlight GitGutterDelete ctermfg=red guifg=darkred
 highlight GitGutterChangeDelete ctermfg=yellow guifg=darkyellow
 
 " Airline
+let g:airline_theme='luna'
 let g:airline_powerline_fonts = 1
 
 " Chooseiwn overlays

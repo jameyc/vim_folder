@@ -95,8 +95,13 @@ NeoBundle 'Shougo/neosnippet.vim.git'
 " Color hex colors like #00f, #f00 and so on. rgb(128,128,128) support too
 NeoBundle 'gorodinskiy/vim-coloresque.git'
 
+" Vim fontsize, keybinds to make the font size jiggly
+NeoBundle 'drmikehenry/vim-fontsize.git'
+
 " Rainbow parens, for nesting
 NeoBundle 'oblitum/rainbow.git'
+
+NeoBundle 'pgilad/vim-skeletons'
 
 " A tag list. Leans on other stuff to generate ctags
 NeoBundle 'milkypostman/vim-togglelist.git'
@@ -142,6 +147,9 @@ set smarttab            "Makes backspace delete leading spaces like tabs
 
 set listchars=tab:→·,trail:≠,nbsp:•,precedes:…,extends:↲ "show whitespace chars
 set list                        " Enable display of whitespace chars
+
+set splitbelow          " always make bottom split active when split horizontally
+set splitright          " always make right split active when split vertically
 
 " places for ultisnips to search for snippets
 "let g:UltiSnipsSnippetDirectories=["UltiSnips", "snippets/vim-snippets/UltiSnips"]
@@ -246,7 +254,7 @@ endif
 " Add dashes to keyword tab completion chars
 set iskeyword+=-
 
-if has("gui_running") || &term == 'xterm-256color'
+if has("gui_running") || &term == 'xterm-256color' || &term == 'screen-256color'
     set t_Co=256
     colorscheme vividchalk       "Color scheme
     set background=dark
@@ -270,9 +278,13 @@ noremap <script> <silent> <S-F1> :call ToggleQuickfixList()<CR>
 "map <silent><F2> <ESC>:Tlist<CR>
 
 noremap <silent><F3> <ESC> :VimFilerExplorer bookmark:<CR>
+noremap <silent><F4> <ESC> :Unite buffer file_mru<CR>
+" file_rec/async, the recursive files from pwd is overkil for basic buffer
+" listing. auto-preview demolishes syntax highlighting. Fix these before
+" reenabling
+"noremap <silent><F4> <ESC> :UniteWithProjectDir buffer file_mru file_rec/async -auto-preview<CR>
 "noremap <silent><F4> <ESC> :Unite buffer<CR>
 "noremap <silent><F4> <ESC> :Unite buffer file_mru<CR>
-noremap <silent><F4> <ESC> :UniteWithProjectDir buffer file_mru file_rec/async -auto-preview<CR>
 noremap <silent><S-F4> <ESC> :Unite grep:~/Documents/Dev/survature/survature.com:-iR:file<CR>
 "noremap <silent><F4> <ESC> :Unite buffer file_mru rec_project/async<CR>
 noremap <silent><F5> <ESC> :Unite history/yank<CR>
@@ -305,6 +317,9 @@ noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 "* Skeletons
 """ REMOVED MOST OLD SKELETONS FOR LACK OF MAINTENANCE
 """ Look into https://github.com/pgilad/vim-skeletons
+""" Update - Installed vim skeletons, need to toss in some skeletons.
+let skeletons#autoRegister = 1
+let skeletons#skeletonsDir = "~/.vim/skeletons"
 
 " Html skeleton with jquery
 " TODO this is outdated, needs an update
@@ -328,7 +343,7 @@ au BufRead,BufNewFile jquery.*.js set ft=javascript syntax=jquery
 au BufNewFile,BufRead *.jinja set filetype=htmldjango tabstop=4 sts=4 sw=4 noet list
 
 au FileType css,sass,scss                   set ts=4 sts=4 sw=4 noet fdm=indent list
-au FileType python,dart,php                 set ts=4 sts=4 sw=4 noet fdm=indent list
+au FileType python,dart,php,py              set ts=4 sts=4 sw=4 noet fdm=indent list
 au FileType lua,haskell,ruby                set sw=2 fdm=indent
 au FileType html,htmldjango,xhtml,xml,yaml  set sw=4 fdm=indent
 au FileType javascript,jquery               set ts=4 sts=4 sw=4 noet fdm=indent syntax=jquery list
@@ -437,3 +452,6 @@ elseif executable('ack')
   let g:unite_source_grep_default_opts = '--exclude ''\.(git|svn|hg|bzr)'''
   let g:unite_source_grep_recursive_opt = ''
 endif
+
+" Allow saving of files as sudo when I forgot to start vim using sudo.
+cmap w!! w !sudo tee > /dev/null %

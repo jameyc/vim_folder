@@ -108,6 +108,9 @@ NeoBundle 'pgilad/vim-skeletons'
 " A tag list. Leans on other stuff to generate ctags
 NeoBundle 'milkypostman/vim-togglelist.git'
 
+" Editorcofig - support for .editorconfig files
+NeoBundle 'editorconfig/editorconfig-vim.git'
+
 " TODO - look into Tern options more
 " Javascript docs and tags
 NeoBundle 'marijnh/tern_for_vim.git', {

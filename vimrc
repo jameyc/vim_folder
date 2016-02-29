@@ -86,14 +86,16 @@ NeoBundle 'jameyc/js-mask.git'
 NeoBundle 'laurentb/vim-cute-php.git'
 
 " A statusline replacement with some extra features
-NeoBundle 'bling/vim-airline.git'
+NeoBundle 'vim-airline/vim-airline.git'
+NeoBundle 'vim-airline/vim-airline-themes'
 
 " Autocomplete and snippet support
 NeoBundle 'Shougo/neocomplete.vim.git'
 NeoBundle 'Shougo/neosnippet.vim.git'
+NeoBundle 'Shougo/neosnippet-snippets.git'
 
 " Color hex colors like #00f, #f00 and so on. rgb(128,128,128) support too
-NeoBundle 'gorodinskiy/vim-coloresque.git'
+" NeoBundle 'gorodinskiy/vim-coloresque.git'
 
 " Vim fontsize, keybinds to make the font size jiggly
 NeoBundle 'drmikehenry/vim-fontsize.git'
@@ -144,6 +146,8 @@ set mousemodel=popup    "Right click popup. I use keys for visual mode.
 set expandtab           "expandtab, makes tabs to spaces
 set shiftwidth=4        "Places tabspots at space(mod2)
 set smarttab            "Makes backspace delete leading spaces like tabs
+
+set ttymouse=xterm2
 
 set listchars=tab:→·,trail:≠,nbsp:•,precedes:…,extends:↲ "show whitespace chars
 set list                        " Enable display of whitespace chars
@@ -216,19 +220,29 @@ set nowb
 set noswapfile
 
 "* Statusline
+let g:syntastic_filetype_map = {"htmldjango": "html"}
+let g:syntastic_html_tidy_exec = '/usr/bin/tidy'
 let g:syntastic_python_checkers=['flake8']
+let g:syntastic_javascript_checkers=['jshint']
+let g:syntastic_scss_checkers=['scss_lint']
+let g:syntastic_jinja_checkers=['tidy', 'jshint']
+let g:syntastic_htmldjango_checkers=['tidy', 'jshint']
 let g:syntastic_enable_signs=1  " Allow syntastic plugin to add markers
 let g:syntastic_check_on_open=1
 let g:syntastic_error_symbol='✗'
 let g:syntastic_warning_symbol='⚠'
+let g:syntastic_style_error_symbol='§'
+let g:syntastic_style_warning_symbol='⸹'
 let g:syntastic_always_populate_loc_list=1
+let g:syntastic_python_flake8_args = "--radon--max-cc 20"
 
 set laststatus=2     " Make sure the windows all get status bars, not just
                      "     the focused one
 
 "*Look and feel, windows or linux specific (font spec differences
 if has("gui_win32")
-    set gfn=DejaVu\ Sans\ Mono:h10
+    "set gfn=DejaVu\ Sans\ Mono:h10
+    set gfn=DejaVu\ Sans\ Mono\ for\ Powerline:h11
     au GUIEnter * simalt ~x
 elseif has("gui_gtk")
     set gfn=DejaVu\ Sans\ Mono\ for\ Powerline\ 10
@@ -340,13 +354,14 @@ au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|
 
 "**Filetype specific
 au BufRead,BufNewFile jquery.*.js set ft=javascript syntax=jquery
-au BufNewFile,BufRead *.jinja set filetype=htmldjango tabstop=4 sts=4 sw=4 noet list
+au BufRead,BufNewFile *.jinja set filetype=htmldjango tabstop=4 sts=4 sw=4 noet list
+au BufRead,BufNewFile *.python set ts=4 sts=4 sw=4 noet fdm=indent list
 
 au FileType css,sass,scss                   set ts=4 sts=4 sw=4 noet fdm=indent list
 au FileType python,dart,php,py              set ts=4 sts=4 sw=4 noet fdm=indent list
 au FileType lua,haskell,ruby                set sw=2 fdm=indent
 au FileType html,htmldjango,xhtml,xml,yaml  set sw=4 fdm=indent
-au FileType javascript,jquery               set ts=4 sts=4 sw=4 noet fdm=indent syntax=jquery list
+au FileType javascript,jquery               set ts=4 sts=4 sw=4 noet fdm=indent syntax=jquery list | syntax on
 au FileType vim                             set sw=4 et fdm=indent
 
 " au FileType python,javascript,jquery,sass,scss,css call rainbow#load()
@@ -412,7 +427,8 @@ highlight GitGutterDelete ctermfg=red guifg=darkred
 highlight GitGutterChangeDelete ctermfg=yellow guifg=darkyellow
 
 " Airline
-let g:airline_theme='luna'
+let g:airline_theme='dark'
+"let g:airline_theme='luna'
 let g:airline_powerline_fonts = 1
 
 " Chooseiwn overlays
